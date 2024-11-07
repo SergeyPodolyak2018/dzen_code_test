@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="/styles.css"
+    />
+  </head>
+  <body>
+    <h1>Login</h1>
+    <form
+      method="POST"
+      action=""
+      id="loginForm"
+    >
+      <input
+        type="email"
+        required
+        name="email"
+        placeholder="Email"
+      />
+      <input
+        type="password"
+        required
+        name="password"
+        placeholder="Password"
+      />
+
+      <button
+        type="submit"
+        class="add-button"
+      >
+        Login
+      </button>
+    </form>
+    <a href="/user/signup">Create new Users</a>
+  </body>
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(event.target);
+      customSubmit(formData);
+    });
+
+    async function sha256(data) {
+      const textAsBuffer = new TextEncoder().encode(data);
+      const hashBuffer = await window.crypto.subtle.digest(
+        'SHA-256',
+        textAsBuffer
+      );
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const digest = hashArray
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+      return digest;
+    }
+
+    async function customSubmit(formData) {
+      const password = formData.get('password');
+      if (!password) return;
+      const hashedPassword = await sha256(password);
+      formData.set('password', hashedPassword);
+      sendData(formData);
+    }
+
+    async function sendData(formData) {
+      const entries = Object.fromEntries(formData);
+
+      try {
+        const response = await fetch('/user/login', {
+          method: 'POST',
+          redirect: 'follow',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify(entries),
+        }).then((res) => {
+          if (res.redirected) {
+            document.location = res.url;
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  </script>
+</html>
