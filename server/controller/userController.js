@@ -18,7 +18,7 @@ const loginUser = async (req, res) => {
 
   try {
     const user = await UserService.getUserByEmail(email);
-    console.log(user);
+
     if (
       user &&
       user.length > 0 &&
@@ -35,7 +35,7 @@ const loginUser = async (req, res) => {
         expires: new Date(Date.now() + 90000),
         httpOnly: true,
       });
-      RedisService.saveSession(accessToken, user[0].id, 60 * 60 * 60);
+      RedisService.saveSession(accessToken, user[0].id, 1000 * 60 * 60 * 2);
 
       res.redirect('/');
     } else {
