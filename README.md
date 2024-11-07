@@ -14,4 +14,4 @@ DB diagram:
 
 Small video
 
-[![Watch the video](./info/DB-diagram.png)](https://drive.google.com/file/d/1xAw-UBUK_6SyWNweUaLcQW2Ce9CPjvbv/view?usp=sharing)
+[![Watch the video](./info/videoPrevue.png)](https://drive.google.com/file/d/1xAw-UBUK_6SyWNweUaLcQW2Ce9CPjvbv/view?usp=sharing)
