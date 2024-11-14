@@ -95,10 +95,10 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_HOST=${REDIS_HOST}
       - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
-    command: >
-      sh -c '
-        sleep 20
-        npm run migrate &&
-        sleep 20 &&
-        npm run seed
-      '
+    # command: >
+    #   sh -c '
+    #     sleep 20
+    #     npm run migrate &&
+    #     sleep 20 &&
+    #     npm run seed
+    #   '

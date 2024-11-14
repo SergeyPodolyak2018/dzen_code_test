@@ -5,6 +5,7 @@ const { ACCESS_TOKEN_SECRET } = require('../const.js');
 const MESSAGE = require('../helper/messages.js');
 const UserService = require('../services/userService.js');
 const RedisService = require('../services/redisService.js');
+const { scryptVerify } = require('../helper/cripto.js');
 
 const loginUserPage = async (req, res) => {
   res.sendFile(path.join(__dirname, '../view/login.html'));
@@ -22,7 +23,7 @@ const loginUser = async (req, res) => {
     if (
       user &&
       user.length > 0 &&
-      (await bcrypt.compare(password, user[0].password))
+      (await scryptVerify(password, user[0].password))
     ) {
       const accessToken = jwt.sign(
         { email, id: user[0].id },
@@ -49,11 +50,15 @@ const loginUser = async (req, res) => {
 };
 
 const postUser = async (req, res) => {
-  const { email, username, password } = req.body;
+  try {
+    const { email, username, password } = req.body;
 
-  await UserService.saveUser(email, username, password);
+    const result = await UserService.saveUser(email, username, password);
 
-  res.redirect('/user/login');
+    res.redirect('/user/login');
+  } catch (err) {
+    console.log(err);
+  }
 };
 const info = async (req, res) => {
   const userId = res.locals?.decoded?.userId || 1; //TODO remove 1
